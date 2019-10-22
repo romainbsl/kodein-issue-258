@@ -19,27 +19,38 @@ object SingletonScope : Scope<GlobalKodeinContext> {
 
 }
 
-object GlobalKodeinContext {
+class GlobalKodeinContext {
     var standardScopeRegistry = StandardScopeRegistry()
 }
 
-class InjectableClass
+class InjectableClass {
+    var value: String? = null
+
+    fun initValue() {
+        value = "World"
+    }
+    fun shwoValue(): String {
+        return value ?: throw NullPointerException()
+    }
+}
 
 val module = Kodein.Module("deployment_config_manager", false) {
     bind<InjectableClass>() with scoped(SingletonScope).singleton { InjectableClass() }
 }
 
 class B(val kodein: Kodein){
-    private val configManager: InjectableClass by kodein.on(context = GlobalKodeinContext).instance()
+    private val injectable: InjectableClass by kodein.on(context = GlobalKodeinContext()).instance()
 
     fun showInstance() {
-        println(configManager)
+        println(injectable)
+        injectable.initValue()
     }
 }
 class C(val kodein: Kodein) {
-    private val configManager: InjectableClass by kodein.on(context = GlobalKodeinContext).instance()
+    private val injectable: InjectableClass by kodein.on(context = GlobalKodeinContext()).instance()
 
     fun showInstance() {
-        println(configManager)
+        println(injectable)
+        println("Hello, " + injectable.shwoValue())
     }
 }
