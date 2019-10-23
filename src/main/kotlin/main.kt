@@ -19,7 +19,7 @@ object SingletonScope : Scope<GlobalKodeinContext> {
 
 }
 
-class GlobalKodeinContext {
+object GlobalKodeinContext {
     var standardScopeRegistry = StandardScopeRegistry()
 }
 
@@ -39,7 +39,7 @@ val module = Kodein.Module("deployment_config_manager", false) {
 }
 
 class B(val kodein: Kodein){
-    private val injectable: InjectableClass by kodein.on(context = GlobalKodeinContext()).instance()
+    private val injectable: InjectableClass by kodein.on(context = GlobalKodeinContext).instance()
 
     fun showInstance() {
         println(injectable)
@@ -47,7 +47,7 @@ class B(val kodein: Kodein){
     }
 }
 class C(val kodein: Kodein) {
-    private val injectable: InjectableClass by kodein.on(context = GlobalKodeinContext()).instance()
+    private val injectable: InjectableClass by kodein.on(context = GlobalKodeinContext).instance()
 
     fun showInstance() {
         println(injectable)
